@@ -1,28 +1,29 @@
-//program to execute a game of hangman//
-
 #include <iostream>
 #include<stdlib.h>
 #include<ctime>
 #include<string.h>
+
 using namespace std;
+
 const int MAX_TRIES=5;
+
 int letterFill(char guess,string secretword, string& guessword);
-void hangman();
+void hangman(string words[]);
 
 int main()
 {
     int option; string ch;
-		string countries[]={"india","afghanistan","london","china","america","pakistan","australia","switzerland","peru","czech_republic"};
-		string rivers[]={"ganga","nile","missouri","brahmaputra","narmada","sindhu","tungabhadra","sharavati","mississipi","godavari"};
+    string countries[]={"india","afghanistan","london","china","america","pakistan","australia","switzerland","peru","czech_republic"};
+    string rivers[]={"ganga","nile","missouri","brahmaputra","narmada","sindhu","tungabhadra","sharavati","mississipi","godavari"};
     string personalities[]={"gandhiji","nelson_mandela","bill_gates","einstein","plato","edison","armstrong","kalpana_chawla","lakshmibai","mother_theresa"};
-		string companies[]={"flipkart","microsoft","google","isro","infosys","robosoft","lamborghini","ferrari","apple","twitter"};
+    string companies[]={"flipkart","microsoft","google","isro","infosys","robosoft","lamborghini","ferrari","apple","twitter"};
 
     cout<<"\t\t\t\tWELCOME TO THE GAME HANGMAN\n";
     cout<<"-------------------------------------------------------------------------\n";
     cout<<"Each letter is represented by a star.\nIf there are two words to be guessed then one star have to be replaced by underscore after the first word\n";
     cout<<"You have "<<MAX_TRIES<<" tries to try and guess the word\n";
     cout<<"Enter each letter in lower case only!\n";
-    cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n";
+    cout<<"-------------------------------------------------------------------------\n";
 label:  cout<<"Type 1 to guess name of countries\n";
         cout<<"Type 2 to guess name of rivers\n";
         cout<<"Type 3 to guess name of personalities\n";
@@ -56,49 +57,52 @@ label:  cout<<"Type 1 to guess name of countries\n";
     }
     else
     {
+        cout<<"********************Thanks for Playing, Bye!****************\n";
         exit(0);
     }
-return 0;
+    return 0;
 }
-void hangman(string [] words)
+void hangman(string words[])
 {
-string name;
-char letter;
-int wrong_guesses_num=0;
-string word,ch;int p;
-srand(time(NULL));
-int n=rand()%10;
-word=words[n];
-string secret(word.length(),'*');
-while(wrong_guesses_num<MAX_TRIES)
-{
-    cout<<"\n"<<secret;
-    cout<<"\nGuess a letter\n";
-    cin>>letter;
-    p=letterFill(letter,word,secret);
-    if(p==0)
+    string name;
+    char letter;
+    int wrong_guesses_num=0;
+    string word,ch;int p;
+    srand(time(NULL));
+    int n=rand()%10;
+    word=words[n];
+    string secret(word.length(),'*');
+    while(wrong_guesses_num<MAX_TRIES)
     {
-        cout<<"\nThat Letter Is not Ther in That Word\n";
-        wrong_guesses_num++;
+        cout<<"\n"<<secret;
+        cout<<"\nGuess a letter\n";
+        cin>>letter;
+        p=letterFill(letter,word,secret);
+        if(p==0)
+        {
+            cout<<"\nThat Letter Is not there in that word\n";
+            wrong_guesses_num++;
+        }
+        else if(p!=0)
+        {
+            cout<<"Amazing! You Have Found A Letter!! :-)\n";
+                goto label;
+        }
+        cout<<"You Have "<<MAX_TRIES-wrong_guesses_num<<" guesses left\n";
+       label: if(word==secret)
+        {
+            cout<<word<<endl;
+            cout<<"WOW!You Got the word!!\n";
+            break;
+        }
     }
-    else if(p!=0)
+    if(wrong_guesses_num==MAX_TRIES)
     {
-        cout<<"Amazing! You Have Found A Letter!! :-)\n";
-            goto label;
+        cout<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+        cout<<"Sorry,You have been HANGED!\n";
+        cout<<"The word was "<<word<<endl;
+        cout<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     }
-    cout<<"You Have "<<MAX_TRIES-wrong_guesses_num<<" guesses left\n";
-   label: if(word==secret)
-    {
-        cout<<word<<endl;
-        cout<<"WOW!You Got the word!!\n";
-        break;
-    }
-}
-if(wrong_guesses_num==MAX_TRIES)
-{
-    cout<<"Sorry,You have been HANGED!\n";
-    cout<<"The word was "<<word<<endl;
-}
 }
 int letterFill(char guess,string secretword, string& guessword)
 {
@@ -118,5 +122,4 @@ int letterFill(char guess,string secretword, string& guessword)
         }
     }
     return matches;
-
 }
